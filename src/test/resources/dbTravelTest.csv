@@ -1,0 +1,4 @@
+Código Hotel,Nombre,Lugar/Ciudad,Tipo de Habitación,Precio por noche,Disponible Desde,Disponible hasta,Reservado
+CH-0002,Cataratas Hotel,Puerto Iguazú,Doble,$6300,10/02/2021,20/03/2021,SI
+CH-0003,Cataratas Hotel 2,Puerto Iguazú,Triple,$8200,10/02/2021,23/03/2021,NO
+BG-0004,Bocagrande,Cartagena,Múltiple,$9370,17/04/2021,12/06/2021,NO

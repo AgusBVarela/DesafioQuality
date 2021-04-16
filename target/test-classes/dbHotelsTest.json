@@ -1,0 +1,32 @@
+[
+  {
+    "codeHotel": "CH-0002",
+    "name": "Cataratas Hotel",
+    "city": "Puerto Iguazú",
+    "roomType": "Doble",
+    "nightPrice": 6300,
+    "dateFrom": "10/02/2021",
+    "dateTo": "20/03/2021",
+    "reserved": true
+  },
+  {
+    "codeHotel": "CH-0003",
+    "name": "Cataratas Hotel 2",
+    "city": "Puerto Iguazú",
+    "roomType": "Triple",
+    "nightPrice": 8200,
+    "dateFrom": "10/02/2021",
+    "dateTo": "23/03/2021",
+    "reserved": false
+  },
+  {
+    "codeHotel": "BG-0004",
+    "name": "Bocagrande",
+    "city": "Cartagena",
+    "roomType": "Multiple",
+    "nightPrice": 9370,
+    "dateFrom": "17/04/2021",
+    "dateTo": "12/06/2021",
+    "reserved": false
+  }
+]
