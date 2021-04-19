@@ -1,9 +1,13 @@
 package TravelPackage.repositories;
 
 import TravelPackage.dtos.HotelDTO;
+import TravelPackage.dtos.TicketDTO;
+import TravelPackage.exceptions.InvalidBookingException;
 import TravelPackage.exceptions.InvalidInstanceDBException;
 import TravelPackage.exceptions.InvalidParamException;
+import TravelPackage.utils.CompareDate;
 import TravelPackage.validations.HotelValidations;
+import org.apache.tomcat.jni.Local;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
@@ -14,6 +18,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -34,17 +40,30 @@ public class HotelRepositoryImple implements HotelRepository{
         if(filters.size() == 0) return this.hotels;
 
         List<HotelDTO> hotelsByDestination = this.hotels.stream().filter(
-                hotel-> (hotel.getCity().toUpperCase().equals(filters.get("destination").toUpperCase()))).collect(Collectors.toList());
-        if(hotelsByDestination.size() == 0) throw new InvalidParamException("El destino solicitado no existe.");
+                hotel-> (hotel.getDestination().equalsIgnoreCase(filters.get("destination")))).collect(Collectors.toList());
+        if(hotelsByDestination.size() == 0) throw new InvalidParamException("El destino elegido no existe.");
 
-        Date dateFrom =new SimpleDateFormat("dd/MM/yyyy").parse(filters.get("dateFrom"));
-        Date dateTo =new SimpleDateFormat("dd/MM/yyyy").parse(filters.get("dateTo"));
+        LocalDate dateFrom = LocalDate.parse(filters.get("dateFrom"), DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        LocalDate dateTo = LocalDate.parse(filters.get("dateTo"), DateTimeFormatter.ofPattern("dd/MM/yyyy"));
 
         List<HotelDTO> result = hotelsByDestination.stream().filter(
-                hotel-> ((hotel.getDateFrom().before(dateFrom) || hotel.getDateFrom().equals(dateFrom)) &&
-                        (hotel.getDateTo().after(dateTo) || hotel.getDateTo().equals(dateTo)))).collect(Collectors.toList());
+                hotel-> (!hotel.isReserved() &&
+                        (CompareDate.BeforeTo(hotel.getDateFrom(), dateFrom) || hotel.getDateFrom().equals(dateFrom)) &&
+                        (CompareDate.AfterTo(hotel.getDateTo(), dateTo) || hotel.getDateTo().equals(dateTo)))).collect(Collectors.toList());
 
         return result;
+    }
+
+    @Override
+    public Double booking(TicketDTO ticket) throws InvalidBookingException {
+        /*Encargado de buscar el hotel que cumpla con las características del ticket.
+        En caso de corresponder, el mismo se califica como reservado y se devuelve el precio por noche del mismo. */
+        HotelDTO hotel = this.hotels.stream().filter(hotelDTO -> hotelDTO.getHotelCode().equals(ticket.getBooking().getHotelCode())).findFirst().orElse(null);
+        if(hotel == null ) throw  new InvalidBookingException("El hotel con hashCode '" + ticket.getBooking().getHotelCode() + "' no existe." );
+        HotelValidations.ValidateBooking(hotel, ticket);
+
+        hotel.setReserved(true);
+        return hotel.getNightPrice();
     }
 
 
@@ -63,11 +82,8 @@ public class HotelRepositoryImple implements HotelRepository{
             while ((line = br.readLine()) != null) {
                 String[] hotel = line.split(cvsSplitBy);
                 HotelValidations.ValidateHotelFromDB(hotel);
-                HotelDTO hotelDTO = new HotelDTO(hotel);
-                hotels.add(hotelDTO);
+                hotels.add(new HotelDTO(hotel));
             }
-        } catch (FileNotFoundException | InvalidInstanceDBException e ) {
-            e.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
