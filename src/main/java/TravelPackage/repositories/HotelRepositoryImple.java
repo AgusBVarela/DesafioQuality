@@ -6,6 +6,7 @@ import TravelPackage.exceptions.InvalidBookingException;
 import TravelPackage.exceptions.InvalidInstanceDBException;
 import TravelPackage.exceptions.InvalidParamException;
 import TravelPackage.utils.CompareDate;
+import TravelPackage.utils.DBUtil;
 import TravelPackage.validations.HotelValidations;
 import org.apache.tomcat.jni.Local;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,10 +29,10 @@ public class HotelRepositoryImple implements HotelRepository{
 
     List<HotelDTO> hotels;
 
-    public HotelRepositoryImple(@Value("${articles_path:src/main/resources/dbTravel.csv}") String path)
+    public HotelRepositoryImple(@Value("${hotel_path:src/main/resources/dbHotel.csv}") String path)
     {
         //Todo en luagr de sacarlo de aca sacarlo de properties
-        this.loadDB(path);
+        hotels = DBUtil.loadHotelDB(path);
     }
 
     @Override
@@ -47,7 +48,7 @@ public class HotelRepositoryImple implements HotelRepository{
         LocalDate dateTo = LocalDate.parse(filters.get("dateTo"), DateTimeFormatter.ofPattern("dd/MM/yyyy"));
 
         List<HotelDTO> result = hotelsByDestination.stream().filter(
-                hotel-> (!hotel.isReserved() &&
+                hotel-> (!hotel.getReserved() &&
                         (CompareDate.BeforeTo(hotel.getDateFrom(), dateFrom) || hotel.getDateFrom().equals(dateFrom)) &&
                         (CompareDate.AfterTo(hotel.getDateTo(), dateTo) || hotel.getDateTo().equals(dateTo)))).collect(Collectors.toList());
 
@@ -66,35 +67,4 @@ public class HotelRepositoryImple implements HotelRepository{
         return hotel.getNightPrice();
     }
 
-
-    private void loadDB(String csvFile) {
-         /*Almacena los datos de la DB en memoria. Crea un HashMap donde la clave es el
-        id del articulo, y el value es el artículo.*/
-
-        hotels = new ArrayList<>();
-        BufferedReader br = null;
-        String line = "";
-        String cvsSplitBy = ",";
-
-        try {
-            br = new BufferedReader(new FileReader(csvFile));
-            br.readLine(); // elimino la cabecera
-            while ((line = br.readLine()) != null) {
-                String[] hotel = line.split(cvsSplitBy);
-                HotelValidations.ValidateHotelFromDB(hotel);
-                hotels.add(new HotelDTO(hotel));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (br != null) {
-                try {
-                    br.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
-    }
 }

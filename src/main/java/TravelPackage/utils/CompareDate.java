@@ -14,4 +14,9 @@ public class CompareDate {
         Devuelve un booleano representando el resultado.*/
         return !AfterTo(date1, date2);
     }
+    public static boolean Equals(LocalDate date1, LocalDate date2){
+        /*Encargada de comparar si la primer fecha es igual a la segunda.
+        Devuelve un booleano representando el resultado.*/
+        return date2.equals(date1);
+    }
 }

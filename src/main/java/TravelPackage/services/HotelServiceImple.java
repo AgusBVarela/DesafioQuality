@@ -10,7 +10,6 @@ import TravelPackage.validations.HotelValidations;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -47,7 +46,9 @@ public class HotelServiceImple implements HotelService {
 
     private void updateTicketPrice(TicketDTO ticket, Double priceNight){
         PaymentMethodDTO paymentMethod = ticket.getBooking().getPaymentMethod();
-        long daysBetween = DAYS.between(ticket.getBooking().getDateFrom(), ticket.getBooking().getDateTo());
+        HotelDTO hotel = (HotelDTO) ticket.getBooking();
+        //long daysBetween = DAYS.between(hotel.getDateFrom(), ticket.getBooking().getDateTo());
+        long daysBetween = DAYS.between(hotel.getDateFrom(), hotel.getDateTo());
         Double totalPrice = priceNight * daysBetween;
         ticket.setAmount(totalPrice);
         ticket.setInterest(totalPrice * this.getInterest(paymentMethod));

@@ -1,0 +1,30 @@
+{
+  "userName": "seba_gonzalez@unmail.com",
+  "amount": 14400.0,
+  "interest": 1440.0,
+  "total": 15840.0,
+  "booking": {
+    "hotelCode": "BH-0002",
+    "destination": "Buenos Aires",
+    "roomType": "DOBLE",
+    "peopleAmount": 2,
+    "dateFrom": "12/02/2021",
+    "dateTo": "14/02/2021",
+    "people": [
+      {
+        "dni": 12345678,
+        "name": "Pepito",
+        "lastName": "Gomez",
+        "birthDate": "20/11/2021",
+        "mail": "pepitogomez@gmail.com"
+      },
+      {
+        "dni": 13345678,
+        "name": "Fulanito",
+        "lastName": "Gomez",
+        "birthDate": "20/11/2021",
+        "mail": "fulanitogomez@gmail.com"
+      }
+    ]
+  }
+}

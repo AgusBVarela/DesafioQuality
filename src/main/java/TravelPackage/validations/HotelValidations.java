@@ -7,14 +7,11 @@ import TravelPackage.exceptions.InvalidBookingException;
 import TravelPackage.exceptions.InvalidInstanceDBException;
 import TravelPackage.exceptions.InvalidParamException;
 import TravelPackage.utils.CompareDate;
-import org.springframework.util.StringUtils;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Pattern;
 
@@ -40,7 +37,7 @@ public class HotelValidations {
 
     public static void ValidateTicket(TicketDTO ticket) throws InvalidParamException {
         String message = "";
-        HotelDTO hotel = ticket.getBooking();
+        HotelDTO hotel = (HotelDTO) ticket.getBooking();
         LocalDate dateTo = hotel.getDateTo();
         LocalDate dateFrom = hotel.getDateFrom();
         if(CompareDate.AfterTo(dateFrom, dateTo)) message += "Fecha de entrada posterior a fecha de salida. ";
@@ -54,9 +51,9 @@ public class HotelValidations {
     }
 
     public static void ValidateBooking(HotelDTO hotel, TicketDTO ticket) throws InvalidBookingException {
-        HotelDTO hotelToBooking = ticket.getBooking();
+        HotelDTO hotelToBooking = (HotelDTO) ticket.getBooking();
         String message = "";
-        if(hotel.isReserved()) message += "El hotel seleccionado no está disponible en la fecha establecida.";
+        if(hotel.getReserved()) message += "El hotel seleccionado no está disponible en la fecha establecida.";
         if(CompareDate.AfterTo(hotelToBooking.getDateFrom(), hotel.getDateFrom())) message += "Fecha de entrada es previa a la disponibilidad del hotel. ";
         if(CompareDate.AfterTo(hotelToBooking.getDateTo(), hotel.getDateTo())) message += "Fecha de salida es posterior a la disponibilidad del hotel.";
         if(!hotelToBooking.getDestination().equals(hotel.getDestination())) message += "El destino solicitado no pertenece al hotel elegido.";
@@ -81,10 +78,10 @@ public class HotelValidations {
 
     private static String validateRoomType(String roomType, int peopleAmount){
         switch(roomType.toUpperCase()) {
-            case "SINGLE":
+            case "SIMPLE":
                 if (peopleAmount == 1) return "";
                 break;
-            case "DOUBLE":
+            case "DOBLE":
                 if (peopleAmount == 2) return "";
                 break;
             case "MÚLTIPLE":
@@ -99,11 +96,11 @@ public class HotelValidations {
     public static void ValidateHotelFromDB(String[] datos) throws InvalidInstanceDBException {
        /*Valida la instancias recibida por parámetro del archivo de DB. En caso de sus valores ser erróneos
         o poseer valores en esas condiciones, lanza una excepción.*/
-        //Todo que no le llegue al usuario.
             int maxParams = 8;
+            String message = "";
             for(int i = 0; i < maxParams; i++){
-                if(datos == null) throw new InvalidInstanceDBException("La DB de hoteles está incompleta");
-                if(datos[i] == null) throw new InvalidInstanceDBException("El hotel " + datos[0] + " posee datos vacios en la DB.");
+                if(datos == null) message += "La DB de hoteles está incompleta";
+                if(datos[i] == null)  message += "El hotel " + datos[0] + " posee datos vacios en la DB.";
             }
 
             try {
@@ -113,7 +110,9 @@ public class HotelValidations {
                 Date dateTo =new SimpleDateFormat("dd/MM/yyyy").parse(datos[6]);
 
             } catch (Exception e) {
-                throw new InvalidInstanceDBException("El hotel " + datos[0] + " posee datos en un formato inesperado: " + e.getMessage());
+                message += "El hotel " + datos[0] + " posee datos en un formato inesperado: " + e.getMessage();
+                System.out.println(message);
+                throw new InvalidInstanceDBException("Ocurrió un error inesperado, por favor contactese con soporte.");
             }
         }
 

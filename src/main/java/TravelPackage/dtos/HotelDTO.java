@@ -37,7 +37,7 @@ public class HotelDTO {
     @JsonDeserialize(using = LocalDateDeserializer.class)
     @JsonSerialize(using = LocalDateSerializer.class)
     private LocalDate dateTo;
-    private boolean reserved;
+    private Boolean reserved = null;
     private List<PeopleDTO> people = null;
     private PaymentMethodDTO paymentMethod = null;
 
@@ -65,7 +65,6 @@ public class HotelDTO {
         //this.dateFrom = new SimpleDateFormat("dd/MM/yyyy").parse(data[5]);;
         //this.dateTo = new SimpleDateFormat("dd/MM/yyyy").parse(data[6]);;
         this.reserved = data[7].toUpperCase().equals("SI")  ? true : false;
-        int i = 0;
     }
 
 
