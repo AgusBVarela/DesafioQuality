@@ -31,7 +31,7 @@ public class FlightRepositoryTest {
 
         @Test
         @DisplayName("Devuelve todos los vuelos de la db.")
-        void getAllHotelsWithoutFilter_OK() throws IOException, InvalidParamException {
+        void getAllWithoutFilter_OK() throws IOException, InvalidParamException {
         /* Test01: encargado de obtener todos los vuelos sin filtros y compararlos con el json de los elementos
          que se deberían obtener. */
             List<FlightDTO> flights = objectMapper.readValue(
@@ -44,7 +44,7 @@ public class FlightRepositoryTest {
 
         @Test
         @DisplayName("Devuelve todos los vuelos que cumplen con el filtro.")
-        void getAllHotelsWithFilter_OK() throws IOException, ParseException, InvalidParamException {
+        void getAllWithFilter_OK() throws IOException, ParseException, InvalidParamException {
         /* Test02: encargado de obtener todos los vuelos con el filtro generado y compararlos con el
         json de los elementos que se deberían obtener. */
             List<FlightDTO> flights = objectMapper.readValue(
@@ -59,7 +59,7 @@ public class FlightRepositoryTest {
 
         @Test
         @DisplayName("Busca filtrar los vuelos con un destino no encontrado. Se espera una excepcion.")
-        void getAllHotelsWithFilter_ERROR() throws IOException, ParseException, InvalidParamException {
+        void getAllWithFilter_ERROR() throws IOException, ParseException, InvalidParamException {
             /* Test03: Se busca obtener los vuelos con un filtro de destino no existente.
             Valida que lance una excepcion.*/
 
