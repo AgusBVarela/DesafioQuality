@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -32,6 +33,8 @@ public class FlightDTO{
     @JsonDeserialize(using = LocalDateDeserializer.class)
     @JsonSerialize(using = LocalDateSerializer.class)
     private LocalDate dateTo;
+    private List<PeopleDTO> people = null;
+    private PaymentMethodDTO paymentMethod = null;
 
     public FlightDTO(String[] data) throws Exception {
         /*Genera una instancia de DTO completándola con los datos recibidos por parámetro según correspodna.*/

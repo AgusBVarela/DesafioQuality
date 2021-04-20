@@ -28,7 +28,7 @@ public class HotelServiceUnitTest {
 
     @BeforeEach
     void setUp() {
-        hotelService = new HotelServiceImple(new HotelRepositoryImple("src/test/resources/dbTravelTest.csv"));
+        hotelService = new HotelServiceImple(new HotelRepositoryImple("src/test/resources/repositoryTest/dbTravelTest.csv"));
     }
 
     @Test

@@ -1,0 +1,20 @@
+[
+  {
+    "flightNumber": "PIBA-1420",
+    "origin": "Puerto Iguazú",
+    "destination": "Bogotá",
+    "seatType": "Business",
+    "price": 43200,
+    "dateFrom": "10/02/2021",
+    "dateTo": "20/02/2021"
+  },
+  {
+    "flightNumber": "PIBA-1420",
+    "origin": "Puerto Iguazú",
+    "destination": "Bogotá",
+    "seatType": "Economy",
+    "price": 25735,
+    "dateFrom": "10/02/2021",
+    "dateTo": "21/02/2021"
+  }
+]

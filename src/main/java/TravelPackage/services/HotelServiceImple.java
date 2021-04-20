@@ -6,6 +6,7 @@ import TravelPackage.dtos.TicketDTO;
 import TravelPackage.exceptions.InvalidBookingException;
 import TravelPackage.exceptions.InvalidParamException;
 import TravelPackage.repositories.HotelRepository;
+import TravelPackage.utils.Price;
 import TravelPackage.validations.HotelValidations;
 import org.springframework.stereotype.Service;
 
@@ -51,17 +52,9 @@ public class HotelServiceImple implements HotelService {
         long daysBetween = DAYS.between(hotel.getDateFrom(), hotel.getDateTo());
         Double totalPrice = priceNight * daysBetween;
         ticket.setAmount(totalPrice);
-        ticket.setInterest(totalPrice * this.getInterest(paymentMethod));
+        ticket.setInterest(totalPrice * Price.getInterest(paymentMethod));
         ticket.setTotal(totalPrice + ticket.getInterest());
     }
 
-    private Double getInterest(PaymentMethodDTO paymentMethodDTO){
-        if(paymentMethodDTO.getType().equalsIgnoreCase("CREDIT")){
-            if(paymentMethodDTO.getDues() <= 3) return 0.05;
-            else if(paymentMethodDTO.getDues() <= 6) return 0.10;
-            else if(paymentMethodDTO.getDues() <= 9) return 0.15;
-            else if(paymentMethodDTO.getDues() <= 12) return 0.20;
-        }
-        return 0d;
-    }
+
 }

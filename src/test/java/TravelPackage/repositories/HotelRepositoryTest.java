@@ -23,7 +23,7 @@ public class HotelRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        hotelRepository = new HotelRepositoryImple("src/test/resources/dbTravelTest.csv");
+        hotelRepository = new HotelRepositoryImple("src/test/resources/repositoryTest/dbTravelTest.csv");
     }
 
     @Test

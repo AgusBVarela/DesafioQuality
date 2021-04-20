@@ -14,7 +14,7 @@ import java.util.Date;
 
 @Data
 @AllArgsConstructor
-//@NoArgsConstructor
+@NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class PeopleDTO {
     private long dni;
